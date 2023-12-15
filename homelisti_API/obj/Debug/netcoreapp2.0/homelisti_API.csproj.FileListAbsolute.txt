@@ -1,0 +1,5 @@
+D:\Project\.NET\homelisti_API\homelisti_API\obj\Debug\netcoreapp2.0\homelisti_API.csproj.AssemblyReference.cache
+D:\Project\.NET\homelisti_API\homelisti_API\obj\Debug\netcoreapp2.0\homelisti_API.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\.NET\homelisti_API\homelisti_API\obj\Debug\netcoreapp2.0\homelisti_API.AssemblyInfoInputs.cache
+D:\Project\.NET\homelisti_API\homelisti_API\obj\Debug\netcoreapp2.0\homelisti_API.AssemblyInfo.cs
+D:\Project\.NET\homelisti_API\homelisti_API\obj\Debug\netcoreapp2.0\homelisti_API.csproj.CoreCompileInputs.cache
