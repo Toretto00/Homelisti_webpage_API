@@ -92,10 +92,33 @@ namespace HomelistiAPI.Controllers
         public List<ListingDTO> Search(string title, string type, int category_id, int location_id, int min_price, int max_price)
         {
             var _dbContext = new HomelistiDbEntities();
-            List<ListingDTO> list = WebApiApplication._mapper.Map<List<ListingDTO>>(_dbContext.Listings
-                .Where(c => c.title.Contains(title) && c.ad_type_id == type && c.category_term_id == category_id && c.Contact.location_term_id == location_id )
-                .ToList());
-            
+            List<ListingDTO> list = WebApiApplication._mapper.Map<List<ListingDTO>>(_dbContext.Listings.ToList());
+
+            if (title != "null" && title != "" && title != null)
+            {
+                list = list.FindAll(x => x.title.Contains(title));
+            }
+            if(type != "null" && (type == "sell" || type == "buy" || type == "rent"))
+            {
+                list = list.FindAll(x => x.listingtype.id == type);
+            }
+            if (category_id != 0 && list.Find(x => x.category.term_id == category_id) != null)
+            {
+                list = list.FindAll( x=> x.category.term_id == category_id);
+            }
+            if(location_id != 0)
+            {
+                list = list.FindAll(x => x.contact.location.term_id == location_id);
+            }
+            if (min_price != 0)
+            {
+                list = list.FindAll(x => Int64.Parse(x.price.Replace(",","")) >= min_price);
+            }
+            if (min_price != 10000000)
+            {
+                list = list.FindAll(x => Int64.Parse(x.price.Replace(",", "")) <= max_price);
+            }
+
             return list;
         }
         [HttpPost]
