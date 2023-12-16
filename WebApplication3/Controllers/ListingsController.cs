@@ -89,7 +89,7 @@ namespace HomelistiAPI.Controllers
         }
         [HttpGet]
         [Route("api/Listings/filter")]
-        public List<ListingDTO> Search(string title, string type, int category_id, int location_id, int min_price, int max_price)
+        public List<ListingDTO> Search(string title, string type, int category_id, int location_id, int min_price, int max_price, string sort_by)
         {
             var _dbContext = new HomelistiDbEntities();
             List<ListingDTO> list = WebApiApplication._mapper.Map<List<ListingDTO>>(_dbContext.Listings.ToList());
@@ -117,6 +117,35 @@ namespace HomelistiAPI.Controllers
             if (min_price != 10000000)
             {
                 list = list.FindAll(x => Int64.Parse(x.price.Replace(",", "")) <= max_price);
+            }
+
+            if(sort_by!= null || sort_by != "date-desc")
+            {
+                switch(sort_by)
+                {
+                    case "title-asc":
+                        list = list.OrderBy(x => x.title).ToList();
+                        return list;
+                    case "title-desc":
+                        list = list.OrderBy(x => x.title).ToList();
+                        list.Reverse();
+                        return list;
+                    case "views-desc":
+                        list = list.OrderBy(x => x.view_count).ToList();
+                        list.Reverse();
+                        return list;
+                    case "views-asc":
+                        list = list.OrderBy(x => x.view_count).ToList();
+                        return list;
+                    case "price-asc":
+                        list = list.OrderBy(x => Int64.Parse(x.price.Replace(",", ""))).ToList();
+                        return list;
+                    case "price-desc":
+                        list = list.OrderBy(x => Int64.Parse(x.price.Replace(",", ""))).ToList();
+                        list.Reverse();
+                        return list;
+                    default: return list;
+                }
             }
 
             return list;
