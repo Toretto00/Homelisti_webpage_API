@@ -2,6 +2,7 @@
 using HomelistiAPI.Db;
 using Microsoft.IdentityModel.Tokens;
 using Ninject.Activation;
+using Ninject.Planning.Targets;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -119,7 +120,7 @@ namespace HomelistiAPI.Controllers
                 list = list.FindAll(x => Int64.Parse(x.price.Replace(",", "")) <= max_price);
             }
 
-            if(sort_by!= null || sort_by != "date-desc")
+            if(sort_by != "date-desc")
             {
                 switch(sort_by)
                 {
@@ -151,11 +152,17 @@ namespace HomelistiAPI.Controllers
             return list;
         }
         [HttpPost]
-        [Authorize]
-        public Listing Post(int listing_id, int author_id, string title, string price, int category_id, string listing_type, int contact_id)
+        //[Authorize]
+        public IHttpActionResult Post( int author_id, string title, string price, int category_id, string listing_type, int tv, int air, int barbeque, int gym, int swim, int laundry, int microwave, int outdoor, int lawn, int refrigerator, int sauna, int washer, int parking, int bed, int bath)
         {
             var _dbContext = new HomelistiDbEntities();
+
+            List<User> user = _dbContext.Users.Where(x => x.id == author_id).ToList();
+            user.ToArray();
+
             Listing listing = new Listing();
+            int listing_id = _dbContext.Listings.ToList().Count() + 1;
+
             listing.listing_id = listing_id;
             listing.author_id = author_id;
             listing.title = title;
@@ -163,10 +170,261 @@ namespace HomelistiAPI.Controllers
             listing.category_term_id = category_id;
             listing.ad_type_id = listing_type;
             listing.view_count = 0;
-            listing.contact_id = contact_id;
+            listing.contact_id = user[0].contact_id;
             _dbContext.Listings.Add(listing);
             _dbContext.SaveChanges();
-            return listing;
+
+            int listings_cus_id = _dbContext.Listings_CustomFields.ToList().Count() + 1;
+            Listings_CustomFields listings_CustomFields = new Listings_CustomFields();
+            listings_CustomFields.id = listings_cus_id;
+            listings_CustomFields.listing_id = listing_id;
+            listings_CustomFields.custom_fields_id = 4216;
+            _dbContext.Listings_CustomFields.Add(listings_CustomFields);
+            _dbContext.SaveChanges();
+
+            listings_CustomFields = new Listings_CustomFields();
+            listings_CustomFields.id = listings_cus_id + 1;
+            listings_CustomFields.listing_id = listing_id;
+            listings_CustomFields.custom_fields_id = 4323;
+            _dbContext.Listings_CustomFields.Add(listings_CustomFields);
+            _dbContext.SaveChanges();
+
+            listings_CustomFields = new Listings_CustomFields();
+            listings_CustomFields.id = listings_cus_id + 2;
+            listings_CustomFields.listing_id = listing_id;
+            listings_CustomFields.custom_fields_id = 4322;
+            _dbContext.Listings_CustomFields.Add(listings_CustomFields);
+            _dbContext.SaveChanges();
+
+            listings_CustomFields = new Listings_CustomFields();
+            listings_CustomFields.id = listings_cus_id + 3;
+            listings_CustomFields.listing_id = listing_id;
+            listings_CustomFields.custom_fields_id = 4316;
+            _dbContext.Listings_CustomFields.Add(listings_CustomFields);
+            _dbContext.SaveChanges();
+
+            listings_CustomFields = new Listings_CustomFields();
+            listings_CustomFields.id = listings_cus_id + 4;
+            listings_CustomFields.listing_id = listing_id;
+            listings_CustomFields.custom_fields_id = 4321;
+            _dbContext.Listings_CustomFields.Add(listings_CustomFields);
+            _dbContext.SaveChanges();
+
+            listings_CustomFields = new Listings_CustomFields();
+            listings_CustomFields.id = listings_cus_id + 5;
+            listings_CustomFields.listing_id = listing_id;
+            listings_CustomFields.custom_fields_id = 4692;
+            _dbContext.Listings_CustomFields.Add(listings_CustomFields);
+            _dbContext.SaveChanges();
+
+            int customFields_val_id = _dbContext.CustomFields_Values.ToList().Count() + 5;
+            CustomFields_Values customFields_Values = new CustomFields_Values();
+            if(tv == 1 || tv != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 1;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (air == 2 || air != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 2;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (barbeque == 3 || barbeque != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 3;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (gym == 4 || gym != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 4;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (swim == 5 || swim != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 5;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (laundry == 6 || laundry != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 6;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (microwave == 7 || microwave != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 7;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (outdoor == 8 || outdoor != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 8;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (lawn == 9 || lawn != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 9;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (refrigerator == 10 || refrigerator != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 10;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (sauna == 11 || sauna != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 11;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+            if (washer == 12 || washer != -1)
+            {
+                customFields_Values = new CustomFields_Values();
+                customFields_val_id += 1;
+                customFields_Values.id = customFields_val_id;
+                customFields_Values.values_id = 12;
+                customFields_Values.custom_fields_id = 4216;
+                customFields_Values.listing_id = listing_id;
+                _dbContext.CustomFields_Values.Add(customFields_Values);
+                _dbContext.SaveChanges();
+            }
+
+            customFields_Values = new CustomFields_Values();
+            customFields_val_id += 1;
+            customFields_Values.id = customFields_val_id;
+            switch (category_id)
+            {
+                case 112:
+                    customFields_Values.values_id = 13;
+                    break;
+                case 162:
+                    customFields_Values.values_id = 14;
+                    break;
+                case 204:
+                    customFields_Values.values_id = 15;
+                    break;
+                default:
+                    customFields_Values.values_id = 13;
+                    break;
+            }
+            customFields_Values.custom_fields_id = 4323;
+            customFields_Values.listing_id = listing_id;
+            _dbContext.CustomFields_Values.Add(customFields_Values);
+            _dbContext.SaveChanges();
+
+            customFields_Values = new CustomFields_Values();
+            customFields_val_id += 1;
+            customFields_Values.id = customFields_val_id;
+            customFields_Values.values_id = parking;
+            customFields_Values.custom_fields_id = 4322;
+            customFields_Values.listing_id = listing_id;
+            _dbContext.CustomFields_Values.Add(customFields_Values);
+            _dbContext.SaveChanges();
+
+            customFields_Values = new CustomFields_Values();
+            customFields_val_id += 1;
+            customFields_Values.id = customFields_val_id;
+            customFields_Values.values_id = bed;
+            customFields_Values.custom_fields_id = 4316;
+            customFields_Values.listing_id = listing_id;
+            _dbContext.CustomFields_Values.Add(customFields_Values);
+            _dbContext.SaveChanges();
+
+            customFields_Values = new CustomFields_Values();
+            customFields_val_id += 1;
+            customFields_Values.id = customFields_val_id;
+            customFields_Values.values_id = bath;
+            customFields_Values.custom_fields_id = 4321;
+            customFields_Values.listing_id = listing_id;
+            _dbContext.CustomFields_Values.Add(customFields_Values);
+            _dbContext.SaveChanges();
+
+            customFields_Values = new CustomFields_Values();
+            customFields_val_id += 1;
+            customFields_Values.id = customFields_val_id;
+            switch (listing_type)
+            {
+                case "sell":
+                    customFields_Values.values_id = 28;
+                    break;
+                case "buy":
+                    customFields_Values.values_id = 29;
+                    break;
+                case "rent":
+                    customFields_Values.values_id = 30;
+                    break;
+                default:
+                    break;
+            }
+            customFields_Values.custom_fields_id = 4692;
+            customFields_Values.listing_id = listing_id;
+            _dbContext.CustomFields_Values.Add(customFields_Values);
+            _dbContext.SaveChanges();
+
+            return Ok(listing);
         }
     }
 }
