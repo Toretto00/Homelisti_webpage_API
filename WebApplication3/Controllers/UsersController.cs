@@ -29,6 +29,14 @@ namespace HomelistiAPI.Controllers
             List<UserDTO> list = WebApiApplication._mapper.Map<List<UserDTO>>(dbContext.Users.ToList());
             return list;
         }
+        [HttpGet]
+        [Route("api/user/id")]
+        public UserDTO FindUser(string username)
+        {
+            var dbContext = new HomelistiDbEntities();
+            UserDTO user = WebApiApplication._mapper.Map<UserDTO>(dbContext.Users.Where(x=>x.Account.username==username).FirstOrDefault());
+            return user;
+        }
         [HttpPost]
         public IHttpActionResult Post(string username, string password)
         {
@@ -40,9 +48,14 @@ namespace HomelistiAPI.Controllers
             return Unauthorized();
         }
         [HttpPost]
-        public UserDTO Register(string username, string password, string first_name, string last_name, int location_id, string address, string phone, string email)
+        public IHttpActionResult Register(string username, string password, string first_name, string last_name, int location_id, string address, string phone, string email)
         {
             var dbContext = new HomelistiDbEntities();
+            Account checkAccount = dbContext.Accounts.Where(x=>x.username == username).FirstOrDefault();
+            if(checkAccount != null)
+            {
+                return BadRequest("Existing username");
+            }
             Account account = new Account();
             account.id = dbContext.Accounts.ToList().Count() + 1;
             account.username = username;
@@ -61,7 +74,7 @@ namespace HomelistiAPI.Controllers
             dbContext.SaveChanges();
 
             User user = new User();
-            user.id = dbContext.Users.ToList().Count() + 1;
+            user.id = dbContext.Users.ToList().Count() + 4;
             user.first_name = first_name;
             user.last_name = last_name;
             user.username = first_name + " " + last_name;
@@ -70,7 +83,7 @@ namespace HomelistiAPI.Controllers
             dbContext.Users.Add(user);
             dbContext.SaveChanges();
 
-            return WebApiApplication._mapper.Map<UserDTO>(user);
+            return Ok(WebApiApplication._mapper.Map<UserDTO>(user));
         }
         public List<UserDTO> IsValidUser(string username, string password)
         {
@@ -90,6 +103,22 @@ namespace HomelistiAPI.Controllers
                 }
             }
             return null;
+        }
+        [HttpPut]
+        public IHttpActionResult ResetPassword(string username, string password)
+        {
+            var dbContext = new HomelistiDbEntities();
+            Account checkAccount = dbContext.Accounts.Where(x => x.username == username).FirstOrDefault();
+            if (checkAccount == null)
+            {
+                return BadRequest("Username does not exist");
+            }
+            else
+            {
+                checkAccount.password = password;
+                dbContext.SaveChanges();
+                return Ok(WebApiApplication._mapper.Map<AccountDTO>(checkAccount));
+            }
         }
         private string GenerateToken(string username)
         {

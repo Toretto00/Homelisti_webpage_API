@@ -152,7 +152,7 @@ namespace HomelistiAPI.Controllers
             return list;
         }
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IHttpActionResult Post( int author_id, string title, string price, int category_id, string listing_type, int tv, int air, int barbeque, int gym, int swim, int laundry, int microwave, int outdoor, int lawn, int refrigerator, int sauna, int washer, int parking, int bed, int bath)
         {
             var _dbContext = new HomelistiDbEntities();
