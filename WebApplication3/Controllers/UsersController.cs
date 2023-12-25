@@ -37,6 +37,14 @@ namespace HomelistiAPI.Controllers
             UserDTO user = WebApiApplication._mapper.Map<UserDTO>(dbContext.Users.Where(x=>x.Account.username==username).FirstOrDefault());
             return user;
         }
+        [HttpGet]
+        [Route("api/user/userId")]
+        public UserDTO FindUserWithID(int id)
+        {
+            var dbContext = new HomelistiDbEntities();
+            UserDTO user = WebApiApplication._mapper.Map<UserDTO>(dbContext.Users.Where(x => x.id == id).FirstOrDefault());
+            return user;
+        }
         [HttpPost]
         public IHttpActionResult Post(string username, string password)
         {
